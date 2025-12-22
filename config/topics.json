@@ -1,0 +1,28 @@
+{
+  "topics": {
+    "migration": {
+      "keywords": ["immigration", "immigrant", "border", "migration", "migrant", "asylum"],
+      "description": "Immigration and border policy related content"
+    },
+    "texas": {
+      "keywords": ["texas", "tx"],
+      "description": "Texas-specific political content"
+    },
+    "economy": {
+      "keywords": ["economy", "economic", "inflation", "jobs", "unemployment", "gdp"],
+      "description": "Economic policy and conditions"
+    },
+    "healthcare": {
+      "keywords": ["healthcare", "health care", "obamacare", "medicare", "medicaid"],
+      "description": "Healthcare policy and insurance"
+    },
+    "climate": {
+      "keywords": ["climate", "global warming", "environment", "clean energy", "carbon"],
+      "description": "Climate change and environmental policy"
+    },
+    "education": {
+      "keywords": ["education", "school", "university", "college", "student"],
+      "description": "Education policy and student issues"
+    }
+  }
+}
