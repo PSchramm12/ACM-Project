@@ -60,7 +60,23 @@ migration_tweets = df[df['topic_migration'] == True]
 
 ## Topic Keywords
 
-Currently supported topics:
+The topic keywords can be configured via the `config/topics.json` file. This allows you to easily add or modify topic definitions without changing code.
+
+### Configuration Format
+
+```json
+{
+  "topics": {
+    "topic_name": {
+      "keywords": ["keyword1", "keyword2"],
+      "description": "Description of the topic"
+    }
+  }
+}
+```
+
+### Currently Configured Topics
+
 - **migration**: immigration, immigrant, border, migration, migrant, asylum
 - **texas**: texas, tx
 - **economy**: economy, economic, inflation, jobs, unemployment, gdp
@@ -68,4 +84,15 @@ Currently supported topics:
 - **climate**: climate, global warming, environment, clean energy, carbon
 - **education**: education, school, university, college, student
 
-You can extend the `topic_keywords` dictionary in `TopicSentimentAnalyzer` to add more topics.
+### Custom Configuration
+
+You can provide a custom configuration file:
+
+```python
+from src.sentiment.analyze_sentiment import TopicSentimentAnalyzer
+
+# Use custom config
+topic_analyzer = TopicSentimentAnalyzer(config_path='path/to/custom_topics.json')
+```
+
+If no config path is provided, the analyzer will look for `config/topics.json` in the project root, or fall back to default hardcoded keywords.

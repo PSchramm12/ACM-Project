@@ -43,9 +43,9 @@ class TweetVolumeAnalyzer:
             DataFrame with aggregated tweet counts
         """
         df[date_column] = pd.to_datetime(df[date_column])
-        volume = df.groupby(pd.Grouper(key=date_column, freq=freq)).size()
-        volume_df = pd.DataFrame({'date': volume.index, 'tweet_count': volume.values})
-        return volume_df
+        volume = df.groupby(pd.Grouper(key=date_column, freq=freq)).size().reset_index(name='tweet_count')
+        volume.columns = ['date', 'tweet_count']
+        return volume
     
     def load_polling_data(self, filepath: str) -> pd.DataFrame:
         """

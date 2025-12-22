@@ -55,17 +55,17 @@ class DataPreparator:
             raise ValueError(f"Missing required columns: {missing_cols}")
         return True
     
-    def clean_text(self, text: str) -> str:
+    def clean_text(self, text: Optional[str]) -> str:
         """
         Clean tweet text by removing URLs, mentions, special characters.
         
         Args:
-            text: Raw tweet text
+            text: Raw tweet text (can be None)
             
         Returns:
             Cleaned text
         """
-        if pd.isna(text):
+        if pd.isna(text) or text is None:
             return ""
         
         # Convert to string

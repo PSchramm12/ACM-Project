@@ -21,7 +21,7 @@ try:
     VADER_AVAILABLE = True
 except ImportError:
     VADER_AVAILABLE = False
-    print("Warning: vaderSentiment not available. Install with: pip install vaderSentiment")
+    print("Warning: vaderSentiment not available. Install with: pip install vadersentiment")
 
 try:
     from textblob import TextBlob
@@ -122,17 +122,42 @@ class SentimentAnalyzer:
 class TopicSentimentAnalyzer:
     """Analyze sentiment directed at specific topics/policies."""
     
-    def __init__(self):
-        """Initialize topic sentiment analyzer."""
-        self.topic_keywords = {
-            'migration': ['immigration', 'immigrant', 'border', 'migration', 'migrant', 'asylum'],
-            'texas': ['texas', 'tx'],
-            'economy': ['economy', 'economic', 'inflation', 'jobs', 'unemployment', 'gdp'],
-            'healthcare': ['healthcare', 'health care', 'obamacare', 'medicare', 'medicaid'],
-            'climate': ['climate', 'global warming', 'environment', 'clean energy', 'carbon'],
-            'education': ['education', 'school', 'university', 'college', 'student'],
-        }
+    def __init__(self, config_path: Optional[str] = None):
+        """
+        Initialize topic sentiment analyzer.
+        
+        Args:
+            config_path: Path to topics configuration JSON file (optional)
+        """
         self.sentiment_analyzer = SentimentAnalyzer()
+        
+        # Load topic keywords from config or use defaults
+        if config_path:
+            self.topic_keywords = self._load_config(config_path)
+        else:
+            # Try to load from default location
+            import os
+            default_config = os.path.join(os.path.dirname(__file__), '..', '..', 'config', 'topics.json')
+            if os.path.exists(default_config):
+                self.topic_keywords = self._load_config(default_config)
+            else:
+                # Fallback to hardcoded defaults
+                self.topic_keywords = {
+                    'migration': ['immigration', 'immigrant', 'border', 'migration', 'migrant', 'asylum'],
+                    'texas': ['texas', 'tx'],
+                    'economy': ['economy', 'economic', 'inflation', 'jobs', 'unemployment', 'gdp'],
+                    'healthcare': ['healthcare', 'health care', 'obamacare', 'medicare', 'medicaid'],
+                    'climate': ['climate', 'global warming', 'environment', 'clean energy', 'carbon'],
+                    'education': ['education', 'school', 'university', 'college', 'student'],
+                }
+    
+    def _load_config(self, config_path: str) -> Dict[str, List[str]]:
+        """Load topic keywords from JSON configuration file."""
+        import json
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+        # Extract just the keywords from the config structure
+        return {topic: data['keywords'] for topic, data in config['topics'].items()}
     
     def detect_topics(self, text: str) -> List[str]:
         """

@@ -2,17 +2,13 @@
 Unit tests for data preparation module.
 
 Run with: python -m pytest tests/
+or install in development mode: pip install -e .
 """
 
 import pytest
 import pandas as pd
-import sys
-import os
 
-# Add src to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-from data_preparation.prepare_data import DataPreparator
+from src.data_preparation.prepare_data import DataPreparator
 
 
 class TestDataPreparator:
