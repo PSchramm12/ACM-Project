@@ -87,7 +87,8 @@ class TweetVolumeAnalyzer:
                             tweet_volume: pd.DataFrame,
                             polling_data: pd.DataFrame,
                             output_path: Optional[str] = None,
-                            title: str = "Tweet Volume vs Polling Data") -> None:
+                            title: str = "Tweet Volume vs Polling Data",
+                            show: bool = False) -> plt.Figure:
         """
         Create dual-axis plot of tweet volume and polling data.
         
@@ -96,6 +97,10 @@ class TweetVolumeAnalyzer:
             polling_data: DataFrame with date and poll_value columns
             output_path: Path to save figure (optional)
             title: Plot title
+            show: Whether to display the plot interactively
+            
+        Returns:
+            matplotlib Figure object
         """
         fig, ax1 = plt.subplots(figsize=(14, 8))
         
@@ -129,15 +134,19 @@ class TweetVolumeAnalyzer:
         if output_path:
             plt.savefig(output_path, dpi=300, bbox_inches='tight')
             print(f"Plot saved to {output_path}")
+            plt.close()
+        elif show:
+            plt.show()
         
-        plt.show()
+        return fig
     
     def plot_sentiment_volume_vs_polls(self,
                                       df: pd.DataFrame,
                                       polling_data: pd.DataFrame,
                                       date_column: str = 'date',
                                       sentiment_column: str = 'sentiment',
-                                      output_path: Optional[str] = None) -> None:
+                                      output_path: Optional[str] = None,
+                                      show: bool = False) -> plt.Figure:
         """
         Create stacked area plot of sentiment volume vs polling data.
         
@@ -147,6 +156,10 @@ class TweetVolumeAnalyzer:
             date_column: Name of date column
             sentiment_column: Name of sentiment column
             output_path: Path to save figure (optional)
+            show: Whether to display the plot interactively
+            
+        Returns:
+            matplotlib Figure object
         """
         # Aggregate by date and sentiment
         df[date_column] = pd.to_datetime(df[date_column])
@@ -177,8 +190,11 @@ class TweetVolumeAnalyzer:
         if output_path:
             plt.savefig(output_path, dpi=300, bbox_inches='tight')
             print(f"Plot saved to {output_path}")
+            plt.close()
+        elif show:
+            plt.show()
         
-        plt.show()
+        return fig
     
     def calculate_correlation(self, 
                             tweet_volume: pd.DataFrame,
@@ -230,13 +246,13 @@ def main():
     
     if args.sentiment and 'sentiment' in tweets_df.columns:
         # Create sentiment-based visualization
-        analyzer.plot_sentiment_volume_vs_polls(tweets_df, polling_df, output_path=args.output)
+        analyzer.plot_sentiment_volume_vs_polls(tweets_df, polling_df, output_path=args.output, show=not args.output)
     else:
         # Aggregate tweet volume
         tweet_volume = analyzer.aggregate_tweet_volume(tweets_df, freq=args.freq)
         
         # Create visualization
-        analyzer.plot_volume_vs_polls(tweet_volume, polling_df, output_path=args.output)
+        analyzer.plot_volume_vs_polls(tweet_volume, polling_df, output_path=args.output, show=not args.output)
         
         # Calculate correlation
         corr = analyzer.calculate_correlation(tweet_volume, polling_df)

@@ -102,12 +102,20 @@ class SentimentAnalyzer:
         
         # VADER sentiment
         if VADER_AVAILABLE:
+            print("Computing VADER sentiment scores...")
             vader_scores = df[text_column].apply(self.analyze_vader)
-            df['vader_pos'] = vader_scores.apply(lambda x: x['pos'])
-            df['vader_neg'] = vader_scores.apply(lambda x: x['neg'])
-            df['vader_neu'] = vader_scores.apply(lambda x: x['neu'])
-            df['vader_compound'] = vader_scores.apply(lambda x: x['compound'])
-            df['sentiment'] = df['vader_compound'].apply(self.classify_sentiment)
+            df = pd.concat([
+                df,
+                pd.DataFrame(vader_scores.tolist(), index=df.index)
+            ], axis=1)
+            df['sentiment'] = df['compound'].apply(self.classify_sentiment)
+            # Rename columns for clarity
+            df.rename(columns={
+                'pos': 'vader_pos',
+                'neg': 'vader_neg',
+                'neu': 'vader_neu',
+                'compound': 'vader_compound'
+            }, inplace=True)
         
         # TextBlob sentiment
         if TEXTBLOB_AVAILABLE:

@@ -72,7 +72,7 @@ class DataPreparator:
         text = str(text)
         
         # Remove URLs
-        text = re.sub(r'http\S+|www.\S+', '', text)
+        text = re.sub(r'http\S+|www\.\S+', '', text)
         
         # Remove mentions
         text = re.sub(r'@\w+', '', text)
