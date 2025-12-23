@@ -1,0 +1,9 @@
+zstandard
+pandas
+numpy
+fuzzywuzzy
+python-Levenshtein
+langdetect
+sentence-transformers
+torch
+
